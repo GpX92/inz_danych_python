@@ -1,18 +1,16 @@
-import csv
-import json
+from extractors.extract import extract
+from loaders.load import load
+from transformations.transform import transform
+import argparse
 
-def extract(path):
-  with open(path, newline="") as file_handler:
-    return list(csv.reader(file_handler, delimiter=","))[1:]
+def job(input_path, output_path):
+  source_data = extract(input_path)
+  transformed_data = transform(source_data)
+  load(transformed_data, output_path)
 
-def transform(employees):
-  return {
-      e[1] for e in employees
-  }
-
-def load(names, path):
-  with open(path, mode="w") as file_handler:
-    json_data = [
-        json.dumps({"Imię": name}) + "\n" for name in names
-    ]
-    file_handler.writelines(json_data)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser("Job")
+    parser.add_argument('--input_path', type=str, help="CSV input")
+    parser.add_argument('--output_path', type=str, help="JSON output")
+    args = parser.parse_args()
+    job(args.input_path, args.output_path)
