@@ -1,6 +1,6 @@
-from extractors.extract import extract
+from extracters.extract import extract
 from loaders.load import load
-from transformations.transform import transform
+from transformers.transform import transform
 import argparse
 
 def job(input_path, output_path):
